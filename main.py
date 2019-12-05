@@ -4,12 +4,12 @@ import matplotlib.pyplot as plt
 
 
 def day1():
-    with open('input1.txt', 'r') as f:
+    with open('inputs/input1.txt', 'r') as f:
         print(sum([int(math.floor(float(n)/3.0) - 2.0) for n in f.read().split('\n')]))
 
 
 def day1_star():
-    with open('input1.txt', 'r') as f:
+    with open('inputs/input1.txt', 'r') as f:
         mass_list = [float(n) for n in f.read().split('\n')]
 
     sum = 0
@@ -22,8 +22,8 @@ def day1_star():
 
 
 def day2():
-    with open('input2.txt', 'r') as f:
-        program = [int(n) for n in  f.read().split(',')]
+    with open('inputs/input2.txt', 'r') as f:
+        program = [int(n) for n in f.read().split(',')]
 
     program[1] = 12
     program[2] = 2
@@ -31,7 +31,7 @@ def day2():
     index = 0
     while program[index] != 99 :
         if program[index] == 1:
-            program[program[index+3]] = program[program[index+1]] + program[program[index+2]]
+            program[program[index + 3]] = program[program[index+1]] + program[program[index+2]]
         elif program[index] == 2:
             program[program[index + 3]] = program[program[index + 1]]*program[program[index + 2]]
         else:
@@ -45,8 +45,8 @@ def day2():
 
 
 def day2_star():
-    with open('input2.txt', 'r') as f:
-        program = [int(n) for n in  f.read().split(',')]
+    with open('inputs/input2.txt', 'r') as f:
+        program = [int(n) for n in f.read().split(',')]
     program_save = program.copy()
 
     out_noun = -1
@@ -109,7 +109,7 @@ def manhattan_distance(p1, p2):
 
 
 def day3():
-    with open('input3.txt', 'r') as f:
+    with open('inputs/input3.txt', 'r') as f:
         wire1 = [[0, 0]]
         for code in f.readline().split(','):
             dir1 = code[0]
@@ -138,7 +138,7 @@ def day3():
 
 
 def day3_star():
-    with open('input3.txt', 'r') as f:
+    with open('inputs/input3.txt', 'r') as f:
         wire1 = [[0, 0]]
         for code in f.readline().split(','):
             dir1 = code[0]
@@ -216,5 +216,86 @@ def day4_star():
     print(cont)
 
 
+def day5():
+    with open('inputs/input5.txt', 'r') as f:
+        program = [int(n) for n in f.read().split(',')]
+
+    index = 0
+    op_code = str(program[index])
+    op_code = op_code if len(op_code) == 5 else f"{'0'*(5-len(op_code))}{op_code}"
+    while int(op_code[-2:]) != 99:
+        if int(op_code[-2:]) == 1:
+            p1 = program[program[index + 1]] if op_code[2] == '0' else program[index + 1]
+            p2 = program[program[index + 2]] if op_code[1] == '0' else program[index + 2]
+            program[program[index + 3]] = p1 + p2
+            index += 4
+        elif int(op_code[-2:]) == 2:
+            p1 = program[program[index + 1]] if op_code[2] == '0' else program[index + 1]
+            p2 = program[program[index + 2]] if op_code[1] == '0' else program[index + 2]
+            program[program[index + 3]] = p1*p2
+            index += 4
+        elif int(op_code[-2:]) == 3:
+            program[program[index + 1]] = int(input("Input: "))
+            index += 2
+        elif int(op_code[-2:]) == 4:
+            print(f"Output: {program[program[index + 1]] if op_code[2] == '0' else program[index + 1]}")
+            index += 2
+        else:
+            print(f"ERROR: Unknown operation code ({op_code})")
+            break
+        op_code = str(program[index])
+        op_code = op_code if len(op_code) == 5 else f"{'0' * (5 - len(op_code))}{op_code}"
+
+
+def day5_star():
+    with open('inputs/input5.txt', 'r') as f:
+        program = [int(n) for n in f.read().split(',')]
+
+    index = 0
+    op_code = str(program[index])
+    op_code = op_code if len(op_code) == 5 else f"{'0'*(5-len(op_code))}{op_code}"
+    while int(op_code[-2:]) != 99:
+        if int(op_code[-2:]) == 1:
+            p1 = program[program[index + 1]] if op_code[2] == '0' else program[index + 1]
+            p2 = program[program[index + 2]] if op_code[1] == '0' else program[index + 2]
+            program[program[index + 3]] = p1 + p2
+            index += 4
+        elif int(op_code[-2:]) == 2:
+            p1 = program[program[index + 1]] if op_code[2] == '0' else program[index + 1]
+            p2 = program[program[index + 2]] if op_code[1] == '0' else program[index + 2]
+            program[program[index + 3]] = p1*p2
+            index += 4
+        elif int(op_code[-2:]) == 3:
+            program[program[index + 1]] = int(input("Input: "))
+            index += 2
+        elif int(op_code[-2:]) == 4:
+            print(f"Output: {program[program[index + 1]] if op_code[2] == '0' else program[index + 1]}")
+            index += 2
+        elif int(op_code[-2:]) == 5:
+            p1 = program[program[index + 1]] if op_code[2] == '0' else program[index + 1]
+            p2 = program[program[index + 2]] if op_code[1] == '0' else program[index + 2]
+            index = p2 if p1 != 0 else index + 3
+            pass
+        elif int(op_code[-2:]) == 6:
+            p1 = program[program[index + 1]] if op_code[2] == '0' else program[index + 1]
+            p2 = program[program[index + 2]] if op_code[1] == '0' else program[index + 2]
+            index = p2 if p1 == 0 else index + 3
+        elif int(op_code[-2:]) == 7:
+            p1 = program[program[index + 1]] if op_code[2] == '0' else program[index + 1]
+            p2 = program[program[index + 2]] if op_code[1] == '0' else program[index + 2]
+            program[program[index + 3]] = 1 if p1 < p2 else 0
+            index += 4
+        elif int(op_code[-2:]) == 8:
+            p1 = program[program[index + 1]] if op_code[2] == '0' else program[index + 1]
+            p2 = program[program[index + 2]] if op_code[1] == '0' else program[index + 2]
+            program[program[index + 3]] = 1 if p1 == p2 else 0
+            index += 4
+        else:
+            print(f"ERROR: Unknown operation code ({op_code})")
+            break
+        op_code = str(program[index])
+        op_code = op_code if len(op_code) == 5 else f"{'0' * (5 - len(op_code))}{op_code}"
+
+
 if __name__ == "__main__":
-    day2_star()
+    day5_star()
