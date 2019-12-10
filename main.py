@@ -297,5 +297,275 @@ def day5_star():
         op_code = op_code if len(op_code) == 5 else f"{'0' * (5 - len(op_code))}{op_code}"
 
 
+def day6():
+    d = {}
+    out = -1
+    # No se por que pero funciona
+    with open('inputs/input6.txt', 'r') as f:
+        for line in f:
+            f_line = line.replace('\n', '').split(')')
+            if not(f_line[0] in d):
+                d[f_line[0]] = 0
+            d[f_line[1]] = d[f_line[0]] + 1
+
+    while(out != sum(d.values())):
+        out = sum(d.values())
+        with open('inputs/input6.txt', 'r') as f:
+            for line in f:
+                f_line = line.replace('\n', '').split(')')
+                if not (f_line[0] in d):
+                    d[f_line[0]] = 0
+                d[f_line[1]] = d[f_line[0]] + 1
+    print(out)
+
+
+def day6_star():
+    d1, d2 = {}, {}
+
+    with open('inputs/input6.txt', 'r') as f:
+        for line in f:
+            f_line = line.replace('\n', '').split(')')
+            d1[str(f_line[1])] = str(f_line[0])
+            if not(str(f_line[0])) in d2:
+                d2[str(f_line[0])] = []
+            d2[str(f_line[0])].append(str(f_line[1]))
+
+    visited = ['YOU']
+    keys = [(d1['YOU'], 0)]
+    while len(keys) > 0 and keys[0][0] != 'SAN':
+        if keys[0][0] in d1 and not(d1[keys[0][0]] in visited):
+            visited.append(d1[keys[0][0]])
+            keys.append((d1[keys[0][0]], keys[0][1]+1))
+
+        if keys[0][0] in d2:
+            for k in d2[keys[0][0]]:
+                if not(k in visited):
+                    visited.append(k)
+                    keys.append((k, keys[0][1]+1))
+        keys.pop(0)
+    print(keys[0][1]-1)
+
+
+def execute_program(program):
+    index, r_base = 0, 0
+    op_code = str(program[index])
+    op_code = op_code if len(op_code) == 5 else f"{'0' * (5 - len(op_code))}{op_code}"
+    while int(op_code[-2:]) != 99:
+        if int(op_code[-2:]) == 1:
+            p1 = program[program[index + 1]] if op_code[2] == '0' else (
+                program[index + 1] if op_code[2] == '1' else program[program[index + 1] + r_base])
+            p2 = program[program[index + 2]] if op_code[1] == '0' else (
+                program[index + 2] if op_code[1] == '1' else program[program[index + 2] + r_base])
+            program[program[index + 3] + (0 if op_code[0] != '2' else r_base)] = p1 + p2
+            index += 4
+        elif int(op_code[-2:]) == 2:
+            p1 = program[program[index + 1]] if op_code[2] == '0' else (
+                program[index + 1] if op_code[2] == '1' else program[program[index + 1] + r_base])
+            p2 = program[program[index + 2]] if op_code[1] == '0' else (
+                program[index + 2] if op_code[1] == '1' else program[program[index + 2] + r_base])
+            program[program[index + 3] + (0 if op_code[0] != '2' else r_base)] = p1*p2
+            index += 4
+        elif int(op_code[-2:]) == 3:
+            program[program[index + 1] + (0 if op_code[2] != '2' else r_base)] = int(input("Input: "))
+            index += 2
+        elif int(op_code[-2:]) == 4:
+            out = program[program[index + 1]] if op_code[2] == '0' else (
+                program[index + 1] if op_code[2] == '1' else program[program[index + 1] + r_base])
+            print(f"Output: {out}")
+            index += 2
+        elif int(op_code[-2:]) == 5:
+            p1 = program[program[index + 1]] if op_code[2] == '0' else (
+                program[index + 1] if op_code[2] == '1' else program[program[index + 1] + r_base])
+            p2 = program[program[index + 2]] if op_code[1] == '0' else (
+                program[index + 2] if op_code[1] == '1' else program[program[index + 2] + r_base])
+            index = p2 if p1 != 0 else index + 3
+            pass
+        elif int(op_code[-2:]) == 6:
+            p1 = program[program[index + 1]] if op_code[2] == '0' else (
+                program[index + 1] if op_code[2] == '1' else program[program[index + 1] + r_base])
+            p2 = program[program[index + 2]] if op_code[1] == '0' else (
+                program[index + 2] if op_code[1] == '1' else program[program[index + 2] + r_base])
+            index = p2 if p1 == 0 else index + 3
+        elif int(op_code[-2:]) == 7:
+            p1 = program[program[index + 1]] if op_code[2] == '0' else (
+                program[index + 1] if op_code[2] == '1' else program[program[index + 1] + r_base])
+            p2 = program[program[index + 2]] if op_code[1] == '0' else (
+                program[index + 2] if op_code[1] == '1' else program[program[index + 2] + r_base])
+            program[program[index + 3] + (0 if op_code[0]!='2' else r_base)] = 1 if p1 < p2 else 0
+            index += 4
+        elif int(op_code[-2:]) == 8:
+            p1 = program[program[index + 1]] if op_code[2] == '0' else (
+                program[index + 1] if op_code[2] == '1' else program[program[index + 1] + r_base])
+            p2 = program[program[index + 2]] if op_code[1] == '0' else (
+                program[index + 2] if op_code[1] == '1' else program[program[index + 2] + r_base])
+            program[program[index + 3] + (0 if op_code[0] != '2' else r_base)] = 1 if p1 == p2 else 0
+            index += 4
+        elif int(op_code[-2:]) == 9:
+            r_base += program[program[index + 1]] if op_code[2] == '0' else (
+                program[index + 1] if op_code[2] == '1' else program[program[index + 1] + r_base])
+            index += 2
+        else:
+            print(f"ERROR: Unknown operation code ({op_code})")
+            break
+        op_code = str(program[index])
+        op_code = op_code if len(op_code) == 5 else f"{'0' * (5 - len(op_code))}{op_code}"
+
+
+def execute_program_two_input(program, i1, i2, i=0):
+    index = i
+    input_index = 0
+    op_code = str(program[index])
+    op_code = op_code if len(op_code) == 5 else f"{'0' * (5 - len(op_code))}{op_code}"
+    while int(op_code[-2:]) != 99:
+        if int(op_code[-2:]) == 1:  # ADD
+            p1 = program[program[index + 1]] if op_code[2] == '0' else program[index + 1]
+            p2 = program[program[index + 2]] if op_code[1] == '0' else program[index + 2]
+            program[program[index + 3]] = p1 + p2
+            index += 4
+        elif int(op_code[-2:]) == 2:  # MULT
+            p1 = program[program[index + 1]] if op_code[2] == '0' else program[index + 1]
+            p2 = program[program[index + 2]] if op_code[1] == '0' else program[index + 2]
+            program[program[index + 3]] = p1 * p2
+            index += 4
+        elif int(op_code[-2:]) == 3:  # IN
+            program[program[index + 1]] = i1 if input_index == 0 else i2
+            input_index += 1
+            index += 2
+        elif int(op_code[-2:]) == 4:  # OUT
+            index += 2
+            out = program[program[index + 1]] if op_code[2] == '0' else program[index + 1]
+            return out, program.copy(), index
+        elif int(op_code[-2:]) == 5:
+            p1 = program[program[index + 1]] if op_code[2] == '0' else program[index + 1]
+            p2 = program[program[index + 2]] if op_code[1] == '0' else program[index + 2]
+            index = p2 if p1 != 0 else index + 3
+            pass
+        elif int(op_code[-2:]) == 6:
+            p1 = program[program[index + 1]] if op_code[2] == '0' else program[index + 1]
+            p2 = program[program[index + 2]] if op_code[1] == '0' else program[index + 2]
+            index = p2 if p1 == 0 else index + 3
+        elif int(op_code[-2:]) == 7:
+            p1 = program[program[index + 1]] if op_code[2] == '0' else program[index + 1]
+            p2 = program[program[index + 2]] if op_code[1] == '0' else program[index + 2]
+            program[program[index + 3]] = 1 if p1 < p2 else 0
+            index += 4
+        elif int(op_code[-2:]) == 8:
+            p1 = program[program[index + 1]] if op_code[2] == '0' else program[index + 1]
+            p2 = program[program[index + 2]] if op_code[1] == '0' else program[index + 2]
+            program[program[index + 3]] = 1 if p1 == p2 else 0
+            index += 4
+        else:
+            print(f"ERROR: Unknown operation code ({op_code})")
+            break
+        op_code = str(program[index])
+        op_code = op_code if len(op_code) == 5 else f"{'0' * (5 - len(op_code))}{op_code}"
+    return 99, program.copy(), index
+
+
+def day7():
+    with open('inputs/input7.txt', 'r') as f:
+        program = [int(n) for n in f.read().split(',')]
+
+    max_out = -1
+    for i in range(5):
+        for j in range(5):
+            for k in range(5):
+                for l in range(5):
+                    for m in range(5):
+                        sig_array = [i, j, k, l, m]
+                        if len(sig_array) == len(set(sig_array)):
+                            out = 0
+                            for s in sig_array:
+                                out, _, _ = execute_program_two_input(program.copy(), s, out)
+                            max_out = max_out if max_out > out else out
+    print(max_out)
+
+
+def day7_star():
+    with open('inputs/input7.txt', 'r') as f:
+        program = [int(n) for n in f.read().split(',')]
+
+    amplifiers_p = [program.copy() for _ in range(5)]
+    amplifiers_i = [0 for _ in range(5)]
+
+    sig_array = [9, 7, 8, 5, 6]
+    last_e = -1
+    out, index = 0, 0
+    while out != 99 or index < 4:
+        out, amplifiers_p[index], amplifiers_i[index] = \
+            execute_program_two_input(amplifiers_p[index], sig_array[index], out, amplifiers_i[index])
+        last_e = last_e if index != 4 else (out if out != 99 else last_e)
+        index = (index + 1) % 5
+    print(last_e)
+
+
+def day8():
+    w, h = 25, 6
+    with open('inputs/input8.txt', 'r') as f:
+        images = f.read()
+    i0, i1 = 0, w*h
+    min_zero = np.Inf
+    out = -1
+    while i1 <= len(images):
+        image = np.array([int(dig) for dig in images[i0:i1]])
+        if np.count_nonzero(image == 0) < min_zero:
+            min_zero = np.count_nonzero(image == 0)
+            out = np.count_nonzero(image == 1)*np.count_nonzero(image == 2)
+        i0 += w*h
+        i1 += w*h
+    print(out)
+
+
+def day8_star():
+    w, h = 25, 6
+    with open('inputs/input8.txt', 'r') as f:
+        images = f.read()
+    i0, i1 = 0, w*h
+    out_image = np.zeros(w*h)+2
+    while i1 <= len(images):
+        image = np.array([int(dig) for dig in images[i0:i1]])
+        out_image[np.argwhere(out_image==2)] = image[np.argwhere(out_image==2)]
+        i0 += w*h
+        i1 += w*h
+    plt.imshow(out_image.reshape((h, w)), cmap='gray')
+    plt.show()
+
+
+def day9():
+    with open('inputs/input9.txt', 'r') as f:
+        program = [int(n) for n in f.read().split(',')]
+
+    program = program + [0 for _ in range(len(program) + 100)]
+    execute_program(program)
+
+
 if __name__ == "__main__":
-    day5_star()
+    day = 9  # int(input("Select a day:"))
+    if day == 1:
+        day1()
+        day1_star()
+    elif day == 2:
+        day2()
+        day2_star()
+    elif day == 3:
+        day3()
+        day3_star()
+    elif day == 4:
+        day4()
+        day4_star()
+    elif day == 5:
+        day5()
+        day5_star()
+    elif day == 6:
+        day6()
+        day6_star()
+    elif day == 7:
+        day7()
+        day7_star()
+    elif day == 8:
+        day8()
+        day8_star()
+    elif day == 9:
+        day9()
+    else:
+        print(f"Day {day} is not done yet")
