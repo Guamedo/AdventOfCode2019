@@ -481,6 +481,7 @@ def day7():
     print(max_out)
 
 
+# Not working
 def day7_star():
     with open('inputs/input7.txt', 'r') as f:
         program = [int(n) for n in f.read().split(',')]
