@@ -27,8 +27,8 @@ def manhattan_distance(p1, p2):
     return np.abs(x1 - x2) + np.abs(y1 - y2)
 
 
-def execute_program(program, input_list=None, start_index=0, out_mode=0):
-    index, input_index, r_base = start_index, 0, 0
+def execute_program(program, input_list=None, start_index=0, out_mode=0, start_r_base=0):
+    index, input_index, r_base = start_index, 0, start_r_base
     op_code = str(program[index])
     op_code = op_code if len(op_code) == 5 else f"{'0' * (5 - len(op_code))}{op_code}"
     while int(op_code[-2:]) != 99:
@@ -57,7 +57,7 @@ def execute_program(program, input_list=None, start_index=0, out_mode=0):
             if out_mode == 0:
                 print(f"Output: {out}")
             else:
-                return out, index
+                return out, index, r_base
         elif int(op_code[-2:]) == 5:  # JUMP IF TRUE
             p1 = program[program[index + 1]] if op_code[2] == '0' else (
                 program[index + 1] if op_code[2] == '1' else program[program[index + 1] + r_base])
@@ -94,4 +94,4 @@ def execute_program(program, input_list=None, start_index=0, out_mode=0):
             break
         op_code = str(program[index])
         op_code = op_code if len(op_code) == 5 else f"{'0' * (5 - len(op_code))}{op_code}"
-    return 99, index
+    return 99, index, r_base

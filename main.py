@@ -9,9 +9,11 @@ from day8 import day8, day8_star
 from day9 import day9, day9_star
 from day10 import day10, day10_star
 from day11 import day11, day11_star
+from day12 import day12, day12_star
+from day13 import day13, day13_star
 
 if __name__ == "__main__":
-    day = 11  # int(input("Select a day:"))
+    day = 13  # int(input("Select a day:"))
     if day == 1:
         day1()
         day1_star()
@@ -32,7 +34,7 @@ if __name__ == "__main__":
         day6_star()
     elif day == 7:
         day7()
-        print("Day 7* is not working yet")
+        print("Day 7* is not working yet :(")
         # day7_star()
     elif day == 8:
         day8()
@@ -45,5 +47,12 @@ if __name__ == "__main__":
         day10_star()
     elif day == 11:
         day11()
+        day11_star()
+    elif day == 12:
+        day12()
+        day12_star()
+    elif day == 13:
+        day13()
+        day13_star()
     else:
         print(f"Day {day} is not done yet")

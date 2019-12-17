@@ -14,7 +14,7 @@ def day7():
                         if len(sig_array) == len(set(sig_array)):
                             out = 0
                             for s in sig_array:
-                                out, _ = execute_program(program.copy(), input_list=[s, out], out_mode=1)
+                                out, _, _ = execute_program(program.copy(), input_list=[s, out], out_mode=1)
                             max_out = max_out if max_out > out else out
     print(max_out)
 
