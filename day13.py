@@ -59,7 +59,12 @@ def day13_star():
     out = 0
     while out != 99:
         out, index, r_base = execute_program(program, start_index=index, out_mode=1, start_r_base=r_base, input_mode=1)
-
+        if out != 111:
+            y, index, r_base = execute_program(program, start_index=index, out_mode=1, start_r_base=r_base,
+                                               input_mode=1)
+            id, index, r_base = execute_program(program, start_index=index, out_mode=1, start_r_base=r_base,
+                                                input_mode=1)
+            greed[y, out] = id
         plt.imshow(greed)
         plt.show()
 

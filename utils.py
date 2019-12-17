@@ -51,7 +51,7 @@ def execute_program(program, input_list=None, start_index=0, out_mode=0, input_m
             input_index += 1
             index += 2
             if input_mode == 1:
-                return -1, index, r_base
+                return 111, index, r_base
         elif int(op_code[-2:]) == 4:  # OUTPUT
             out = program[program[index + 1]] if op_code[2] == '0' else (
                 program[index + 1] if op_code[2] == '1' else program[program[index + 1] + r_base])
