@@ -41,7 +41,9 @@ def day13_star():
     index, r_base = 0, 0
     x, y, id = 0, 0, 0
     greed = np.zeros((23, 43), dtype=int)
-    score = 0
+    ball_pos = [-1, -1]
+    paddle_pos = [-1, -1]
+    dir_ball = 1
 
     while True:
         x, index, r_base = execute_program(program, start_index=index, out_mode=1, start_r_base=r_base, input_mode=1)
@@ -53,19 +55,51 @@ def day13_star():
         greed[y, x] = id
         if id == 4:
             ball_pos = [y, x]
-    plt.imshow(greed)
-    plt.show()
+        if id == 3:
+            paddle_pos = [y, x]
 
     out = 0
+    fg = plt.figure()
+    ax = fg.gca()
+    h = ax.imshow(greed)
     while out != 99:
-        out, index, r_base = execute_program(program, start_index=index, out_mode=1, start_r_base=r_base, input_mode=1)
+        if paddle_pos[1] == ball_pos[1]:
+            out, index, r_base = execute_program(program, start_index=index, out_mode=1, start_r_base=r_base,
+                                                 input_list=[0], input_mode=1)
+        elif paddle_pos[1] > ball_pos[1] + dir_ball and dir_ball !=0:
+            out, index, r_base = execute_program(program, start_index=index, out_mode=1, start_r_base=r_base,
+                                                 input_list=[-1], input_mode=1)
+        elif paddle_pos[1] < ball_pos[1] + dir_ball and dir_ball !=0:
+            out, index, r_base = execute_program(program, start_index=index, out_mode=1, start_r_base=r_base,
+                                                 input_list=[1], input_mode=1)
+        else:
+            out, index, r_base = execute_program(program, start_index=index, out_mode=1, start_r_base=r_base,
+                                                 input_list=[0], input_mode=1)
+        if out == 99:
+            break
         if out != 111:
-            y, index, r_base = execute_program(program, start_index=index, out_mode=1, start_r_base=r_base,
-                                               input_mode=1)
-            id, index, r_base = execute_program(program, start_index=index, out_mode=1, start_r_base=r_base,
-                                                input_mode=1)
-            greed[y, out] = id
-        plt.imshow(greed)
-        plt.show()
-
+            y, index, r_base = execute_program(program, start_index=index, out_mode=1, start_r_base=r_base)
+            if y == 99:
+                break
+            id, index, r_base = execute_program(program, start_index=index, out_mode=1, start_r_base=r_base)
+            if id == 99:
+                break
+            if out == -1:
+                print(f"Score: {id}")
+            else:
+                greed[y, out] = id
+                if id == 4:
+                    if out > ball_pos[1]:
+                        dir_ball = 1
+                    elif out < ball_pos[1]:
+                        dir_ball = -1
+                    ball_pos = [y, out]
+                if id == 3:
+                    paddle_pos = [y, out]
+        else:
+            pass
+            h.set_array(greed)
+            ax.axis('equal')
+            plt.draw()
+            plt.pause(1e-20)
     pass
