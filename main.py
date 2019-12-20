@@ -13,7 +13,7 @@ from day12 import day12, day12_star
 from day13 import day13, day13_star
 
 if __name__ == "__main__":
-    day = 13  # int(input("Select a day:"))
+    day = 12  # int(input("Select a day:"))
     if day == 1:
         day1()
         day1_star()
